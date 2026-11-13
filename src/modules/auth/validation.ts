@@ -1,0 +1,10 @@
+import { z } from 'zod';
+export const email = z.email().max(254).transform(v => v.toLowerCase());
+export const password = z.string().min(12).max(72).refine(v => Buffer.byteLength(v) <= 72, 'Password must fit in 72 bytes');
+export const username = z.string().min(3).max(30).regex(/^[a-zA-Z0-9_]+$/).transform(v => v.toLowerCase());
+export const registerInput = z.strictObject({ email, username, password });
+export const loginInput = z.strictObject({ email, password: z.string().min(1).max(256) });
+export const emailInput = z.strictObject({ email });
+export const credentialInput = z.strictObject({ credential: z.string().min(20).max(256) });
+export const resetInput = credentialInput.extend({ password });
+export const refreshInput = z.strictObject({ refreshToken: z.string().min(20).max(256) });
